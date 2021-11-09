@@ -904,6 +904,10 @@
       },
       "location": "[parameters('location')]",
       "kind": "functionapp",
+      // see details here https://www.codeisahighway.com/there-is-a-new-way-to-reference-managed-identity-in-arm-template/
+      "identity": {
+        "type": "SystemAssigned"
+      },            
       "dependsOn": [
         "[resourceId('microsoft.operationalinsights/workspaces', parameters('workspaceName'))]",
         "[resourceId('Microsoft.Web/serverfarms', variables('functionAppHostingPlanName'))]",
