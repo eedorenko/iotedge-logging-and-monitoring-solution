@@ -421,6 +421,7 @@
     },
     "functionAppName": {
       "type": "string",
+      "defaultValue": "test",
       "metadata": {
         "description": "Name for the Function App resource."
       }
@@ -525,9 +526,16 @@
     "eventGridDeploymentName": "[concat('storagesystemtopic-', parameters('environmentHashId'))]",
     "eventHubsDeploymentName": "[concat('eventhubs-', parameters('environmentHashId'))]",
     "eventHubsConsumerGroup": "$default",
-    "linkedDeploymentApiVersion": "2020-10-01"
+    "linkedDeploymentApiVersion": "2020-10-01",
+    "managedIdentityName": "monitoringIdentity"
   },
   "resources": [
+    {
+      "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+      "apiVersion": "2018-11-30",
+      "name": "[variables('managedIdentityName')]",
+      "location": "[parameters('location')]"
+    },
     {
       "type": "Microsoft.Resources/deployments",
       "condition": "[parameters('createEventHubs')]",
@@ -588,7 +596,8 @@
       "name": "[variables('iotHubDeploymentNames')['true']]",
       "resourceGroup": "[parameters('iotHubResourceGroup')]",
       "dependsOn": [
-        "[variables('eventHubsDeploymentName')]"
+        "[variables('eventHubsDeploymentName')]",
+        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('managedIdentityName'))]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -686,7 +695,10 @@
           },
           "branchName": {
             "value": "[parameters('branchName')]"
-          }
+          },
+          "managedIdentityName": {
+            "value": "[variables('managedIdentityName')]"
+          }          
         }
       }
     },
@@ -696,7 +708,7 @@
       "apiVersion": "[variables('linkedDeploymentApiVersion')]",
       "name": "[variables('iotHubDeploymentNames')['false']]",
       "resourceGroup": "[parameters('iotHubResourceGroup')]",
-      "dependsOn": [],
+      "dependsOn": ["[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('managedIdentityName'))]"],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -778,7 +790,10 @@
           },
           "branchName": {
             "value": "[parameters('branchName')]"
-          }
+          },
+          "managedIdentityName": {
+            "value": "[variables('managedIdentityName')]"
+          }          
         }
       }
     },
@@ -904,9 +919,12 @@
       },
       "location": "[parameters('location')]",
       "kind": "functionapp",
-      // see details here https://www.codeisahighway.com/there-is-a-new-way-to-reference-managed-identity-in-arm-template/
       "identity": {
-        "type": "SystemAssigned"
+        "type": "UserAssigned",
+         "userAssignedIdentities": {
+           "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('managedIdentityName'))]": {}
+      }
+
       },            
       "dependsOn": [
         "[resourceId('microsoft.operationalinsights/workspaces', parameters('workspaceName'))]",

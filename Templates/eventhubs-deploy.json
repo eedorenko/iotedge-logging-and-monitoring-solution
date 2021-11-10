@@ -92,13 +92,7 @@
             "metadata": {
                 "description": "Event hubs send policy name."
             }
-        },
-        "functionAppName": {
-            "type": "string",
-            "metadata": {
-              "description": "Name for the Function App resource."
-            }
-          }        
+        }
     },
     "variables": {
         "NamespaceId": "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaceName'))]",

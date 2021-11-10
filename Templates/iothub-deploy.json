@@ -86,10 +86,10 @@
     "branchName": {
       "type": "string"
     },
-    "functionAppName": {
+    "managedIdentityName": {
       "type": "string",
       "metadata": {
-        "description": "Name for the Function App resource."
+        "description": "Name for the Managed Identity."
       }
     }        
   },
@@ -106,7 +106,8 @@
     "dpsGlobalEndpoint": "[concat('global.', variables('dpsGlobalDomain'))]",
     "edgePublicIPAddressName": "[concat(parameters('edgeVmName'), '-ip')]",
     "edgeNetworkInterfaceName": "[concat(parameters('edgeVmName'), '-nic')]",
-    "edgeNetworkSecurityGroupName": "[concat(parameters('edgeVmName'), '-nsg')]"
+    "edgeNetworkSecurityGroupName": "[concat(parameters('edgeVmName'), '-nsg')]",
+    "ioTHubDataContributor": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4fc6c259-987e-4a07-842e-c321cc9d413f')]"
   },
   "resources": [
     {
@@ -134,19 +135,19 @@
             "rights": "ServiceConnect,RegistryRead"
           }
         ],
-        "accessPolicies": [
-          {
-              "tenantId": "[subscription().tenantid]",
-              "objectId": "[reference(resourceId('Microsoft.Web/sites', variables('uniqueResourceNameBase')),'2019-08-01', 'full').identity.principalId]",
-              "permissions": {
-                "keys": [],
-                "secrets": [
-                  "get"
-                ],
-                "certificates": []
-              }
-            }
-          ],        
+        // "accessPolicies": [
+        //   {
+        //       "tenantId": "[subscription().tenantid]",
+        //       "objectId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('managedIdentityName')),'2019-08-01', 'full').identity.principalId]",                            
+        //       "permissions": {
+        //         "keys": [],
+        //         "secrets": [
+        //           "get"
+        //         ],
+        //         "certificates": []
+        //       }
+        //     }
+        //   ],        
         "ipFilterRules": [],
         "eventHubEndpoints": {
           "events": {
@@ -201,6 +202,19 @@
         "features": "None"
       }
     },
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2020-04-01-preview",
+      "name": "[newGuid()]",
+      "scope": "[concat('Microsoft.Devices/Iothubs', '/', parameters('iotHubName'))]",
+      "dependsOn": [
+          "[parameters('iotHubName')]"
+      ],
+      "properties": {
+          "roleDefinitionId": "[variables('ioTHubDataContributor')]",
+          "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('managedIdentityName')),'2019-08-01', 'full').identity.principalId]"          
+      }
+    },    
     {
       "comments": "Azure Device Provisioning service.",
       "condition": "[parameters('createIoTHub')]",
