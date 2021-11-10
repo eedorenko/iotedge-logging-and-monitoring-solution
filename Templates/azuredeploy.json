@@ -917,9 +917,6 @@
         "[variables('eventGridDeploymentName')]",
         "[variables('eventHubsDeploymentName')]"
       ],
-      "identity": {
-        "type": "SystemAssigned"
-      },
       "properties": {
         "name": "[parameters('functionAppName')]",
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('functionAppHostingPlanName'))]",

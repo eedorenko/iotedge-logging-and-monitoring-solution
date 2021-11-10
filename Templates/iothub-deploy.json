@@ -85,7 +85,13 @@
     },
     "branchName": {
       "type": "string"
-    }
+    },
+    "functionAppName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name for the Function App resource."
+      }
+    }        
   },
   "variables": {
     "iotHubDomain": "[if(startsWith(parameters('iotHubLocation'), 'usgov'), '.azure-devices.us', if(startsWith(parameters('iotHubLocation'), 'usdod'), '.azure-devices.us', '.azure-devices.net'))]",
@@ -128,6 +134,19 @@
             "rights": "ServiceConnect,RegistryRead"
           }
         ],
+        "accessPolicies": [
+          {
+              "tenantId": "[subscription().tenantid]",
+              "objectId": "[reference(resourceId('Microsoft.Web/sites', variables('uniqueResourceNameBase')),'2019-08-01', 'full').identity.principalId]",
+              "permissions": {
+                "keys": [],
+                "secrets": [
+                  "get"
+                ],
+                "certificates": []
+              }
+            }
+          ],        
         "ipFilterRules": [],
         "eventHubEndpoints": {
           "events": {
