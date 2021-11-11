@@ -925,9 +925,9 @@
         "location": "[parameters('location')]",
         "kind": "functionapp",
         "identity": {
-          "type": "UserAssigned",
-           "userAssignedIdentities": {
-             "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('managedIdentityName'))]": {}
+          "type": "SystemAssigned"
+          //  "userAssignedIdentities": {
+          //    "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('managedIdentityName'))]": {}
         }
   
         },            
@@ -1087,12 +1087,15 @@
         "name": "[guid('iotHubRoleAssignmentName', variables('iotHubDeploymentName'))]",
         "scope": "[concat('Microsoft.Devices/Iothubs', '/', variables('iotHubDeploymentName'))]",
         "dependsOn": [
-            "[variables('iotHubDeploymentName')]"
+            "[variables('iotHubDeploymentName')]",
+            "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
         ],
         "properties": {
             "roleDefinitionId": "[variables('ioTHubDataContributor')]",
             // "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',parameters('managedIdentityName'))).principalId]"
-            "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',variables('managedIdentityName'))).principalId]"
+            // "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',variables('managedIdentityName'))).principalId]"
+            "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')),'2019-08-01', 'full').identity.principalId]"
+            
         }
       }      
     ],
