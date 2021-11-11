@@ -527,18 +527,19 @@
       "eventHubsDeploymentName": "[concat('eventhubs-', parameters('environmentHashId'))]",
       "eventHubsConsumerGroup": "$default",
       "linkedDeploymentApiVersion": "2020-10-01",
-      "managedIdentityName": "monitoringIdentity"
+      "managedIdentityName": "monitoringIdentity",
+      "ioTHubDataContributor": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4fc6c259-987e-4a07-842e-c321cc9d413f')]"
     },
     "resources": [
       //Using user-assigned managed identity instead of system-assigned one
       //to eliminate cyclic dependencies (hub<>functions)
       //and because user-assigned managed identity is more explicit and controllable/managable  
-      {
-        "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
-        "apiVersion": "2018-11-30",
-        "name": "[variables('managedIdentityName')]",
-        "location": "[parameters('location')]"
-      },
+      // {
+      //   "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+      //   "apiVersion": "2018-11-30",
+      //   "name": "[variables('managedIdentityName')]",
+      //   "location": "[parameters('location')]"
+      // },
       {
         "type": "Microsoft.Resources/deployments",
         "condition": "[parameters('createEventHubs')]",
@@ -793,10 +794,11 @@
             },
             "branchName": {
               "value": "[parameters('branchName')]"
-            },
-            "managedIdentityName": {
-              "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',variables('managedIdentityName'))).principalId]"
-            }          
+            }
+            // ,
+            // "managedIdentityName": {
+            //   "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',variables('managedIdentityName'))).principalId]"
+            // }          
           }
         }
       },
@@ -1077,7 +1079,21 @@
           }
         },
         "resources": []
-      }
+      },
+      {
+        "type": "Microsoft.Authorization/roleAssignments",
+        "apiVersion": "2020-04-01-preview",
+        "name": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',variables('managedIdentityName'))).principalId]",
+        "scope": "[concat('Microsoft.Devices/Iothubs', '/', variables('iotHubDeploymentName'))]",
+        "dependsOn": [
+            "[variables('iotHubDeploymentName')]"
+        ],
+        "properties": {
+            "roleDefinitionId": "[variables('ioTHubDataContributor')]",
+            // "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',parameters('managedIdentityName'))).principalId]"
+            "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',variables('managedIdentityName'))).principalId]"
+        }
+      }      
     ],
     "outputs": {
       "iotHubResourceId": {
