@@ -240,7 +240,7 @@
       ],
       "properties": {
           "roleDefinitionId": "[variables('ioTHubDataContributor')]",
-          "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName')),'2018-11-30', 'full').identity.principalId]"          
+          "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',parameters('managedIdentityName'))).principalId]"
       }
     },    
     {

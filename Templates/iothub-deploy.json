@@ -101,7 +101,7 @@
     "iotHubServiceKeysId": "[resourceId(resourceGroup().name, 'Microsoft.Devices/Iothubs/IoTHubKeys', parameters('iotHubName'), parameters('iotHubServicePolicyName'))]",
     "iotHubApiVersion": "[providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]]",
     "dpsResourceId": "[resourceId(resourceGroup().name, 'Microsoft.Devices/provisioningServices', parameters('dpsName'))]",
-    "dpsApiVersion": "[providers('Microsoft.Devices', 'ProvisioningServices').apiVersions[0]]",
+    "dpsApiVersion": "2020-03-01",
     "dpsGlobalDomain": "[if(startsWith(parameters('iotHubLocation'), 'usgov'), 'azure-devices-provisioning.us', if(startsWith(parameters('iotHubLocation'), 'usdod'), 'azure-devices-provisioning.us', 'azure-devices-provisioning.net'))]",
     "dpsGlobalEndpoint": "[concat('global.', variables('dpsGlobalDomain'))]",
     "edgePublicIPAddressName": "[concat(parameters('edgeVmName'), '-ip')]",
@@ -213,7 +213,7 @@
       ],
       "properties": {
           "roleDefinitionId": "[variables('ioTHubDataContributor')]",
-          "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName')),'2018-11-30', 'full').identity.principalId]"          
+          "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',parameters('managedIdentityName'))).principalId]"
       }
     },    
     {
