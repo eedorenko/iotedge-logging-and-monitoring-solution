@@ -1083,7 +1083,8 @@
       {
         "type": "Microsoft.Authorization/roleAssignments",
         "apiVersion": "2020-04-01-preview",
-        "name": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',variables('managedIdentityName'))).principalId]",
+        // "name": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',variables('managedIdentityName'))).principalId]",
+        "name": "[guid('iotHubRoleAssignmentName', variables('iotHubDeploymentName'))]",
         "scope": "[concat('Microsoft.Devices/Iothubs', '/', variables('iotHubDeploymentName'))]",
         "dependsOn": [
             "[variables('iotHubDeploymentName')]"
