@@ -530,6 +530,9 @@
       "managedIdentityName": "monitoringIdentity"
     },
     "resources": [
+      //Using user-assigned managed identity instead of system-assigned one
+      //to eliminate cyclic dependencies (hub<>functions)
+      //and because user-assigned managed identity is more explicit and controllable/managable  
       {
         "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
         "apiVersion": "2018-11-30",
