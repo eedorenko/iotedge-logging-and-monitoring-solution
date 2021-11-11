@@ -928,7 +928,7 @@
           "type": "SystemAssigned"
           //  "userAssignedIdentities": {
           //    "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('managedIdentityName'))]": {}
-        }
+        //}
   
         },            
         "dependsOn": [
