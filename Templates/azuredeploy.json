@@ -600,8 +600,9 @@
         "name": "[variables('iotHubDeploymentNames')['true']]",
         "resourceGroup": "[parameters('iotHubResourceGroup')]",
         "dependsOn": [
-          "[variables('eventHubsDeploymentName')]",
-          "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('managedIdentityName'))]"
+          "[variables('eventHubsDeploymentName')]"
+          // ,
+          // "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('managedIdentityName'))]"
         ],
         "properties": {
           "mode": "Incremental",
@@ -699,9 +700,11 @@
             },
             "branchName": {
               "value": "[parameters('branchName')]"
-            },
+            }
+            ,
             "managedIdentityName": {
-              "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',variables('managedIdentityName'))).principalId]"
+              // "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',variables('managedIdentityName'))).principalId]"
+              "value": "dskjfbnsdjk"
             }          
           }
         }
@@ -712,7 +715,7 @@
         "apiVersion": "[variables('linkedDeploymentApiVersion')]",
         "name": "[variables('iotHubDeploymentNames')['false']]",
         "resourceGroup": "[parameters('iotHubResourceGroup')]",
-        "dependsOn": ["[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('managedIdentityName'))]"],
+        // "dependsOn": ["[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('managedIdentityName'))]"],
         "properties": {
           "mode": "Incremental",
           "templateLink": {
