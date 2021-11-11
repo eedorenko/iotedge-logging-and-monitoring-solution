@@ -996,7 +996,7 @@
               },
               {
                 "name": "HubHostName",
-                "value": "[reference(variables('iotHubDeploymentName'))]"
+                "value": "[concat(variables('iotHubDeploymentName'),'.azure-devices.net')]"
               },
               {
                 "name": "HubResourceId",
@@ -1012,7 +1012,7 @@
               },
               {
                 "name": "EventHub__fullyQualifiedNamespace",
-                "value": "[if(parameters('createEventHubs'), concat(reference(variables('eventHubsDeploymentName')), '.servicebus.windows.net'), '')]"
+                "value": "[if(parameters('createEventHubs'), concat(variables('eventHubsDeploymentName'), '.servicebus.windows.net'), '')]"
               },
               {
                 "name": "CompressForUpload",
