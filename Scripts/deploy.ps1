@@ -1006,8 +1006,8 @@ function New-ELMSEnvironment() {
         --name "IoTEdgeLogging-$($script:env_hash)" `
         --mode Incremental `
         --template-file "$($root_path)/Templates/azuredeploy.json" `
-        --parameters "$($root_path)/Templates/azuredeploy.parameters.json" | ConvertFrom-Json `
-        --api-version 2020-03-01 # See https://github.com/Azure/azure-cli/issues/20263
+        --parameters "$($root_path)/Templates/azuredeploy.parameters.json" | ConvertFrom-Json
+        # --api-version 2020-03-01 # See https://github.com/Azure/azure-cli/issues/20263
     
     if (!$script:deployment_output) {
         throw "Something went wrong with the resource group deployment. Ending script."        
