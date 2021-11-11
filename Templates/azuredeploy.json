@@ -701,11 +701,11 @@
             "branchName": {
               "value": "[parameters('branchName')]"
             }
-            ,
-            "managedIdentityName": {
-              // "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',variables('managedIdentityName'))).principalId]"
-              "value": "dskjfbnsdjk"
-            }          
+            // ,
+            // "managedIdentityName": {
+            //   // "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',variables('managedIdentityName'))).principalId]"
+            //   "value": "dskjfbnsdjk"
+            // }          
           }
         }
       },
