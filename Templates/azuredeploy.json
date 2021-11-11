@@ -1004,7 +1004,8 @@
               },
               {
                 "name": "HubHostName",
-                "value": "[concat(variables('iotHubDeploymentName'),'.azure-devices.net')]"
+                // "value": "[concat(parameters('iotHubName'),'.azure-devices.net')]"
+                "value": "[reference(variables('iotHubDeploymentName'), variables('linkedDeploymentApiVersion')).outputs.hostname.value]"                
               },
               {
                 "name": "HubResourceId",
@@ -1087,8 +1088,8 @@
         "type": "Microsoft.Authorization/roleAssignments",
         "apiVersion": "2020-04-01-preview",
         // "name": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',variables('managedIdentityName'))).principalId]",
-        "name": "[guid('iotHubRoleAssignmentName', variables('iotHubDeploymentName'))]",
-        "scope": "[concat('Microsoft.Devices/Iothubs', '/', variables('iotHubDeploymentName'))]",
+        "name": "[guid('iotHubRoleAssignmentName', parameters('iotHubName'))]",
+        "scope": "[concat('Microsoft.Devices/Iothubs', '/', parameters('iotHubName'))]",
         "dependsOn": [
             "[variables('iotHubDeploymentName')]",
             "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
