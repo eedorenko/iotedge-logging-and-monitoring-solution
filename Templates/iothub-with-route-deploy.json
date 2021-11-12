@@ -406,7 +406,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat('sudo bash edge-setup.sh --idScope \"', if(parameters('createIoTHub'), reference(variables('dpsResourceId'), variables('dpsApiVersion')).idScope, 'idScope'), '\" --dpsConnString \"', 'HostName=', parameters('dpsName'), '.', variables('dpsGlobalDomain'), ';SharedAccessKeyName=provisioningserviceowner;SharedAccessKey=', if(parameters('createIoTHub'), listKeys(variables('dpsResourceId'), '2020-03-01').value[0].primaryKey, 'SharedAccessKey'), '\"', ' --dpsGlobalEndpoint ', '\"', 'https://', variables('dpsGlobalEndpoint'), '\"')]"
+          "commandToExecute": "[concat('sudo bash edge-setup.sh --idScope \"', if(parameters('createIoTHub'), reference(variables('dpsResourceId'), variables('dpsApiVersion')).idScope, 'idScope'), '\" --dpsConnString \"', 'HostName=', parameters('dpsName'), '.', variables('dpsGlobalDomain'), ';SharedAccessKeyName=provisioningserviceowner;SharedAccessKey=', if(parameters('createIoTHub'), listKeys(variables('dpsResourceId'), variables('dpsApiVersion')).value[0].primaryKey, 'SharedAccessKey'), '\"', ' --dpsGlobalEndpoint ', '\"', 'https://', variables('dpsGlobalEndpoint'), '\"')]"
         }
       },
       "dependsOn": [
