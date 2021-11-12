@@ -1066,7 +1066,8 @@
         "scope": "[concat('Microsoft.Devices/Iothubs', '/', parameters('iotHubName'))]",
         "dependsOn": [
             "[variables('iotHubDeploymentName')]",
-            "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
+            "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]",
+            "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')),'2019-08-01', 'full').identity.principalId]"
         ],
         "properties": {
             "roleDefinitionId": "[variables('ioTHubDataContributor')]",
@@ -1081,7 +1082,8 @@
         "scope": "[concat('Microsoft.EventHub/namespaces', '/', parameters('eventHubsNamespace'))]",
         "dependsOn": [
             "[variables('eventHubsDeploymentName')]",
-            "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
+            "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]",
+            "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')),'2019-08-01', 'full').identity.principalId]"
         ],
         "properties": {
             "roleDefinitionId": "[variables('eventHubsDataReceiver')]",
