@@ -1081,8 +1081,7 @@
         "scope": "[concat('Microsoft.EventHub/namespaces', '/', parameters('eventHubsNamespace'))]",
         "dependsOn": [
             "[variables('eventHubsDeploymentName')]",
-            "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]",
-            "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')),'2019-08-01', 'full').identity.principalId]"
+            "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
         ],
         "properties": {
             "roleDefinitionId": "[variables('eventHubsDataReceiver')]",
