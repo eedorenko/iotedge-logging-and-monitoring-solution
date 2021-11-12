@@ -1,5 +1,6 @@
 $root_path = Split-Path $PSScriptRoot -Parent
 Import-Module "$root_path/Scripts/PS-Library"
+# eedorenko should be reverted back to Azure-Samples before PRing to upstream 
 $github_repo_url = "https://raw.githubusercontent.com/eedorenko/iotedge-logging-and-monitoring-solution"
 
 function Set-EnvironmentHash {
@@ -1007,7 +1008,6 @@ function New-ELMSEnvironment() {
         --mode Incremental `
         --template-file "$($root_path)/Templates/azuredeploy.json" `
         --parameters "$($root_path)/Templates/azuredeploy.parameters.json" | ConvertFrom-Json
-        # --api-version 2020-03-01 # See https://github.com/Azure/azure-cli/issues/20263
     
     if (!$script:deployment_output) {
         throw "Something went wrong with the resource group deployment. Ending script."        

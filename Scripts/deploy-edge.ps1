@@ -214,6 +214,7 @@ function New-IoTEnvironment() {
         "edgeSubnetId"                = @{ "value" = $edge_subnet_id }
         "dpsIdScope"                  = @{ "value" = $dps_id_scope }
         "dpsConnectionString"         = @{ "value" = $dps_conn_string }
+        # eedorenko should be reverted back to Azure-Samples before PRing to upstream 
         "templateUrl"                 = @{ "value" = "https://raw.githubusercontent.com/eedorenko/iotedge-logging-and-monitoring-solution" }
         "branchName"                  = @{ "value" = $(git rev-parse --abbrev-ref HEAD) }
     }
