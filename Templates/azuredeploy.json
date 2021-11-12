@@ -1107,7 +1107,7 @@
         "scope": "[concat('Microsoft.EventHub/namespaces', '/', parameters('eventHubsNamespace'))]",
         "dependsOn": [
             "[variables('eventHubsDeploymentName')]",
-            "[resourceId('Microsoft.EventHub/namespaces', parameters('eventHubsNamespace'))]"
+            "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
         ],
         "properties": {
             "roleDefinitionId": "[variables('eventHubsDataReceiver')]",
