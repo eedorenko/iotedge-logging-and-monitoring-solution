@@ -86,13 +86,6 @@
     "branchName": {
       "type": "string"
     }
-    // ,
-    // "managedIdentityName": {
-    //   "type": "string",
-    //   "metadata": {
-    //     "description": "Name for the Managed Identity."
-    //   }
-    // }        
   },
   "variables": {
     "iotHubDomain": "[if(startsWith(parameters('iotHubLocation'), 'usgov'), '.azure-devices.us', if(startsWith(parameters('iotHubLocation'), 'usdod'), '.azure-devices.us', '.azure-devices.net'))]",
@@ -108,9 +101,6 @@
     "edgePublicIPAddressName": "[concat(parameters('edgeVmName'), '-ip')]",
     "edgeNetworkInterfaceName": "[concat(parameters('edgeVmName'), '-nic')]",
     "edgeNetworkSecurityGroupName": "[concat(parameters('edgeVmName'), '-nsg')]"
-    // ,
-    // "ioTHubDataContributor": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4fc6c259-987e-4a07-842e-c321cc9d413f')]",
-    // "roleAssignmentName": "[parameters('managedIdentityName')]"    
   },
   "resources": [
     {
@@ -138,19 +128,6 @@
             "rights": "ServiceConnect,RegistryRead"
           }
         ],
-        // "accessPolicies": [
-        //   {
-        //       "tenantId": "[subscription().tenantid]",
-        //       "objectId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('managedIdentityName')),'2019-08-01', 'full').identity.principalId]",                            
-        //       "permissions": {
-        //         "keys": [],
-        //         "secrets": [
-        //           "get"
-        //         ],
-        //         "certificates": []
-        //       }
-        //     }
-        //   ],        
         "ipFilterRules": [],
         "eventHubEndpoints": {
           "events": {
@@ -205,20 +182,6 @@
         "features": "None"
       }
     },
-    // {
-    //   "type": "Microsoft.Authorization/roleAssignments",
-    //   "apiVersion": "2020-04-01-preview",      
-    //   "name": "[variables('roleAssignmentName')]",
-    //   "scope": "[concat('Microsoft.Devices/Iothubs', '/', parameters('iotHubName'))]",
-    //   "dependsOn": [
-    //       "[parameters('iotHubName')]"
-    //   ],
-    //   "properties": {
-    //       "roleDefinitionId": "[variables('ioTHubDataContributor')]",
-    //       //"principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',parameters('managedIdentityName'))).principalId]"
-    //       "principalId": "[parameters('managedIdentityName')]"
-    //   }
-    // },    
     {
       "comments": "Azure Device Provisioning service.",
       "condition": "[parameters('createIoTHub')]",

@@ -532,15 +532,6 @@
       "eventHubsDataReceiver": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'a638d3c7-ab3a-418d-83e6-5f17a39d4fde')]"
     },
     "resources": [
-      //Using user-assigned managed identity instead of system-assigned one
-      //to eliminate cyclic dependencies (hub<>functions)
-      //and because user-assigned managed identity is more explicit and controllable/managable  
-      // {
-      //   "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
-      //   "apiVersion": "2018-11-30",
-      //   "name": "[variables('managedIdentityName')]",
-      //   "location": "[parameters('location')]"
-      // },
       {
         "type": "Microsoft.Resources/deployments",
         "condition": "[parameters('createEventHubs')]",
@@ -602,8 +593,6 @@
         "resourceGroup": "[parameters('iotHubResourceGroup')]",
         "dependsOn": [
           "[variables('eventHubsDeploymentName')]"
-          // ,
-          // "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('managedIdentityName'))]"
         ],
         "properties": {
           "mode": "Incremental",
@@ -702,11 +691,6 @@
             "branchName": {
               "value": "[parameters('branchName')]"
             }
-            // ,
-            // "managedIdentityName": {
-            //   // "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',variables('managedIdentityName'))).principalId]"
-            //   "value": "dskjfbnsdjk"
-            // }          
           }
         }
       },
@@ -716,7 +700,6 @@
         "apiVersion": "[variables('linkedDeploymentApiVersion')]",
         "name": "[variables('iotHubDeploymentNames')['false']]",
         "resourceGroup": "[parameters('iotHubResourceGroup')]",
-        // "dependsOn": ["[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('managedIdentityName'))]"],
         "properties": {
           "mode": "Incremental",
           "templateLink": {
@@ -799,10 +782,6 @@
             "branchName": {
               "value": "[parameters('branchName')]"
             }
-            // ,
-            // "managedIdentityName": {
-            //   "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',variables('managedIdentityName'))).principalId]"
-            // }          
           }
         }
       },
@@ -930,10 +909,6 @@
         "kind": "functionapp",
         "identity": {
           "type": "SystemAssigned"
-          //  "userAssignedIdentities": {
-          //    "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('managedIdentityName'))]": {}
-        //}
-  
         },            
         "dependsOn": [
           "[resourceId('microsoft.operationalinsights/workspaces', parameters('workspaceName'))]",
@@ -1005,7 +980,6 @@
               },
               {
                 "name": "HubHostName",
-                // "value": "[concat(parameters('iotHubName'),'.azure-devices.net')]"
                 "value": "[reference(variables('iotHubDeploymentName'), variables('linkedDeploymentApiVersion')).outputs.hostname.value]"                
               },
               {
@@ -1153,13 +1127,5 @@
         "type": "string",
         "value": "[if(parameters('createEventHubs'), reference(variables('eventHubsDeploymentName'), variables('linkedDeploymentApiVersion')).outputs.instanceSendKey.value, '')]"
       }
-      // "functionReference": {
-      //   "type": "object",
-      //   "value": "[reference(variables('functionAppResourceId'), variables('functionApiVersion'))]"
-      // },
-      // "functionKeys": {
-      //   "type": "object",
-      //   "value": "[listKeys(variables('functionAppResourceId'), variables('functionApiVersion'))]"
-      // }
     }
   }
