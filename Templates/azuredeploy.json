@@ -528,7 +528,8 @@
       "eventHubsConsumerGroup": "$default",
       "linkedDeploymentApiVersion": "2020-10-01",
       "managedIdentityName": "monitoringIdentity",
-      "ioTHubDataContributor": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4fc6c259-987e-4a07-842e-c321cc9d413f')]"
+      "ioTHubDataContributor": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4fc6c259-987e-4a07-842e-c321cc9d413f')]",
+      "eventHubsDataReceiver": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'a638d3c7-ab3a-418d-83e6-5f17a39d4fde')]"
     },
     "resources": [
       //Using user-assigned managed identity instead of system-assigned one
@@ -1087,7 +1088,6 @@
       {
         "type": "Microsoft.Authorization/roleAssignments",
         "apiVersion": "2020-04-01-preview",
-        // "name": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',variables('managedIdentityName'))).principalId]",
         "name": "[guid('iotHubRoleAssignmentName', parameters('iotHubName'))]",
         "scope": "[concat('Microsoft.Devices/Iothubs', '/', parameters('iotHubName'))]",
         "dependsOn": [
@@ -1096,8 +1096,21 @@
         ],
         "properties": {
             "roleDefinitionId": "[variables('ioTHubDataContributor')]",
-            // "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',parameters('managedIdentityName'))).principalId]"
-            // "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',variables('managedIdentityName'))).principalId]"
+            "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')),'2019-08-01', 'full').identity.principalId]"
+            
+        }
+      },
+      {
+        "type": "Microsoft.Authorization/roleAssignments",
+        "apiVersion": "2020-04-01-preview",
+        "name": "[guid('eventHubRoleAssignmentName', parameters('eventHubsNamespace'))]",
+        "scope": "[concat('Microsoft.EventHub/namespaces', '/', parameters('eventHubsNamespace'))]",
+        "dependsOn": [
+            "[variables('eventHubsDeploymentName')]",
+            "[resourceId('Microsoft.EventHub/namespaces', parameters('eventHubsNamespace'))]"
+        ],
+        "properties": {
+            "roleDefinitionId": "[variables('eventHubsDataReceiver')]",
             "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')),'2019-08-01', 'full').identity.principalId]"
             
         }
